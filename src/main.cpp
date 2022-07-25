@@ -36,7 +36,7 @@ sInternalBook InternalBook;
 
 void PrintVersion() {
 
-    printf("id OpenTal 1.0"
+    printf("id OpenTal 1.1"
 
 #if !(defined(_WIN64) || defined(__x86_64__))
             " 32-bit"
@@ -45,13 +45,13 @@ void PrintVersion() {
 #endif
 
 #if   defined(__clang__)
-            "/CLANG " __clang_version__
+            " CLANG " __clang_version__
 #elif defined(__MINGW32__)
-            "/MINGW " __VERSION__
+            " MINGW " __VERSION__
 #elif defined(__GNUC__)
             "/GCC " __VERSION__
 #elif defined(_MSC_VER)
-            "/MSVS"
+            " MSVS"
     #if   _MSC_VER == 1900
                 "2015"
     #elif _MSC_VER >= 1910
@@ -60,9 +60,9 @@ void PrintVersion() {
 #endif
 
 #if (defined(_MSC_VER) && defined(USE_MM_POPCNT)) || (defined(__GNUC__) && defined(__POPCNT__))
-            "/POPCNT"
+            " POPCNT"
 #elif defined(__GNUC__) && defined(__SSSE3__) // we are using custom SSSE3 popcount implementation
-            "/SSSE3"
+            " SSSE3"
 #endif
 
                         "\n");
@@ -88,7 +88,7 @@ int main() {
     Dist.Init();
 
 	Par.use_book = true;
-	Par.verbose_book = true; // TODO: change to false in release
+	Par.verbose_book = false;
 
     PrintVersion();
 
@@ -125,4 +125,5 @@ void cGlobals::Init() {
     should_clear = false;
     is_console = true;
     elo_slider = true;
+	multiPv = 1;
 }

@@ -104,6 +104,7 @@ constexpr int INF       = 32767;
 constexpr int MATE      = 32000;
 constexpr int MAX_EVAL  = 29999;
 constexpr int MAX_HIST  = 1 << 15;
+constexpr int MAX_PV    = 12;
 
 constexpr U64 RANK_1_BB = 0x00000000000000FF;
 constexpr U64 RANK_2_BB = 0x000000000000FF00;
@@ -449,6 +450,10 @@ struct sPawnHashEntry {
     int eg_pawns;
 };
 
+struct Line {
+	int pv[MAX_PLY];
+};
+
 enum Values {
     P_MID, P_END, N_MID, N_END, B_MID, B_END, R_MID, R_END, Q_MID, Q_END,               // piece values
     B_PAIR, N_PAIR, R_PAIR, ELEPH, A_EXC, A_TWO, A_MAJ, A_MIN, A_ALL,                   // material adjustments
@@ -650,11 +655,16 @@ class cGlobals {
     glob_int depth_reached;
     int moves_from_start; // to restrict book depth for weaker levels
     int thread_no;
+	int multiPv;
     int time_buffer;
     U64 game_key;         // random key initialized on ucinewgame to ensure non-repeating random eval modification for weak personalities
+    int avoidMove[MAX_PV + 1]; // list of moves to avoid in multi-pv re-searches
 
     void ClearData();
     void Init();
+    bool MoveToAvoid(int move);
+    void ClearAvoidList();
+	void SetAvoidMove(int loc, int move);
 };
 
 extern cGlobals Glob;
@@ -727,11 +737,12 @@ class cEngine {
 
     void Iterate(POS *p, int *pv);
     int Widen(POS *p, int depth, int *pv, int lastScore);
+    int SearchRoot(POS *p, int ply, int alpha, int beta, int depth, int *pv);
     int Search(POS *p, int ply, int alpha, int beta, int depth, bool was_null, int last_move, int last_capt_sq, int *pv);
     int QuiesceChecks(POS *p, int ply, int alpha, int beta, int *pv);
     int QuiesceFlee(POS *p, int ply, int alpha, int beta, int *pv);
     int Quiesce(POS *p, int ply, int alpha, int beta, int *pv);
-    void DisplayPv(int score, int *pv);
+    void DisplayPv(int multiPv, int score, int *pv);
     void Slowdown();
 
     int Evaluate(POS *p, eData *e);
@@ -811,6 +822,7 @@ class cEngine {
     void Bench(int depth);
     void ClearAll();
     void Think(POS *p);
+	void MultiPv(POS *p, int * pv);
 };
 
 #ifdef USE_THREADS

@@ -51,8 +51,8 @@ void sInternalBook::Init() {
         const int bfreq = ((sBookEntry *)b)->freq;
         return bfreq - afreq;
     });
-
-    printf("info string %d moves loaded from the internal book\n", n_of_records);
+	
+    if (Par.verbose_book) printf("info string %d moves loaded from the internal book\n", n_of_records);
 
 }
 
@@ -116,7 +116,7 @@ void sInternalBook::MoveToInternal(U64 hashKey, int move, int val) {
 
 int sInternalBook::MoveFromInternal(POS *p, bool print_output) const {
 
-    printf("info string probing the internal book...\n");
+    if (Par.verbose_book) printf("info string probing the internal book...\n");
 
     int choice = 0;
 

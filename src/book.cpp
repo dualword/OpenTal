@@ -388,7 +388,7 @@ int sBook::GetPolyglotMove(POS *p, bool print_output) {
 
 	if (bookFile != NULL) srand(GetMS());
 
-	printf("info string probing '%s'...\n", bookName);
+	if (Par.verbose_book) printf("info string probing '%s'...\n", bookName);
 
 	for (int pos = FindPos(key); pos < bookSizeInEntries && (ReadEntry(entry, pos), entry->key == key); pos++) {
 

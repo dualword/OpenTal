@@ -33,6 +33,7 @@ void PrintUciOptions() {
 #ifdef USE_THREADS
     printf("option name Threads type spin default %d min 1 max %d\n", Glob.thread_no, MAX_THREADS);
 #endif
+    printf("option name MultiPV type spin default %d min 1 max %d\n", Glob.multiPv, MAX_PV);
     printf("option name Clear Hash type button\n");
 
     printf("option name Ponder type check default %s\n", Par.use_ponder ? "true" : "false");
@@ -112,7 +113,9 @@ void ParseSetoption(const char *ptr) {
         Trans.Clear();
     } else if (strcmp(name, "timebuffer") == 0)                              {
         Glob.time_buffer = atoi(value);
- 
+     } else if (strcmp(name, "multipv") == 0)                                {
+        Glob.multiPv = atoi(value);
+
     // Here starts a block of non-eval options
 
     } else if (strcmp(name, "mainbookfile") == 0)                            {

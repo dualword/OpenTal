@@ -85,8 +85,6 @@ void ChessHeapClass::AllocTrans(unsigned int mbsize) {
     }
 
     Clear();
-
-    printf("info string %uMB of memory allocated\n", prev_size);
 }
 
 void ChessHeapClass::Clear() {
@@ -96,7 +94,7 @@ void ChessHeapClass::Clear() {
     ZeroMem();
 }
 
-bool ChessHeapClass::Retrieve(U64 key, int *move, int *score, int alpha, int beta, int depth, int ply) {
+bool ChessHeapClass::Retrieve(U64 key, int *move, int *score, int *flag, int alpha, int beta, int depth, int ply) {
 
     if (!success) return false;
 
@@ -109,13 +107,14 @@ bool ChessHeapClass::Retrieve(U64 key, int *move, int *score, int alpha, int bet
             entry->date = tt_date;
             *move = entry->move;
             if (entry->depth >= depth) {
+				*flag = entry->flags;
                 *score = entry->score;
                 if (*score < -MAX_EVAL)
                     *score += ply;
                 else if (*score > MAX_EVAL)
                     *score -= ply;
                 if ((entry->flags & UPPER && *score <= alpha)
-                        || (entry->flags & LOWER && *score >= beta)) {
+                || (entry->flags & LOWER && *score >= beta)) {
                     //entry->date = tt_date; // refreshing entry TODO: test at 4 threads, at 1 thread it's a wash
 
                     UNLOCK_ME_PLEASE0;
