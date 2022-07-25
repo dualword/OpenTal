@@ -1,0 +1,11 @@
+#
+/.build/
+Makefile
+.qmake.stash
+/opental
+
+#
+/.cproject
+/.project
+/.externalToolBuilders
+/.settings

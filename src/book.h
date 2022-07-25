@@ -19,6 +19,7 @@ If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstdio>
 #include <cstring>
+#include <cmath>
 
 struct polyglot_move {
     U64 key;
